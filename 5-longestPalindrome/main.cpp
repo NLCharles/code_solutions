@@ -20,8 +20,38 @@ public:
         }
         return true;
     }
-    string longestPalindrome(string s) {
 
+    int  mask[1000][1000]; // s[i][j] = s[j][i]
+
+    bool isPalindrome_DP(string &s, int i, int j) // DP 
+    {
+        if (i==j) return true;
+        if (i==j-1) return s[i] == s[j];
+        return s[i] == s[j] && mask[i+1][j-1];
+    }
+
+    string longestPalindrome(string s) {
+        int head=0,tail=0;
+        int cur_max=0, max = 0;
+        int i,j;
+        bool flag;
+        for (j=0;j<s.size();j++)
+        {
+            for (i=0; i<j+1; i++)
+            {
+                mask[i][j] = flag = isPalindrome_DP(s,i,j);
+                if (flag)
+                {
+                    cur_max = j-i+1;
+                    if (cur_max > max)
+                    {
+                        max =  cur_max;
+                        head = i;
+                    }
+                }
+            }
+        }
+        return s.substr(head, max);
     }
 };
 int main(){
